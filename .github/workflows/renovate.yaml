@@ -56,7 +56,7 @@ jobs:
 
           curl -sf -H "Authorization: $UPLOAD_AUTHZ_TOKEN" \
           -H "X-Bz-File-Name: logs%2Frenovate-$(TZ=Europe/Brussels date +%Y%m%d%H%M).jsonl" \
-          -H "Content-Type: application/json" \
+          -H "Content-Type: application/jsonl" \
           -H "Content-Length: $(stat --format %s $LOG_FILE)" \
           -H "X-Bz-Content-Sha1: $(sha1sum $LOG_FILE | cut -f1 -d ' ')" \
           --data-binary "@$LOG_FILE" \
