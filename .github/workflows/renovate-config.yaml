@@ -1,0 +1,21 @@
+---
+name: Renovate config
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  renovate-config-validator:
+    name: Renovate config validator
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/renovatebot/renovate:43.220.0@sha256:459b7e28aa54fa2fa7db83df6a2d6ad26de416a054ee554e7833203adf3d9a47
+      # github hosted runners are running as `1001:127` (ubuntu:docker)
+      options: -u 1001:0 --group-add 1000 --group-add 12021 --group-add 127
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - name: Validate global configuration
+        run: renovate-config-validator .github/renovate-global.json
