@@ -1,1 +1,3 @@
-Renovate
+# Renovate
+
+Self-hosted Renovate bot.
