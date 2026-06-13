@@ -1,6 +1,9 @@
 ---
 name: Renovate
 
+concurrency:
+  group: ${{ github.workflow }}
+
 on:
   schedule:
     - cron: '0 * * * *'
@@ -23,18 +26,18 @@ jobs:
           owner: ${{ github.repository_owner }}
       - name: Run self-hosted Renovate
         env:
-          LOG_FILE: renovate-log.json
+          LOG_FILE: /tmp/renovate-log.json
           LOG_FILE_FORMAT: json
           LOG_FILE_LEVEL: debug
         uses: renovatebot/github-action@8217b3fc286df088d7c27f3255fe8414463bc0fd # v46.1.15
         with:
           configurationFile: .github/renovate-global.json
-          env-regex: ^(?:RENOVATE_\\w+|LOG_\\w+|GITHUB_COM_TOKEN|NODE_OPTIONS|NO_COLOR|(?:HTTPS?|NO)_PROXY|(?:https?|no)_proxy)$
+          env-regex: "^(?:RENOVATE_\\w+|LOG_\\w+|GITHUB_COM_TOKEN|NODE_OPTIONS|NO_COLOR|(?:HTTPS?|NO)_PROXY|(?:https?|no)_proxy)$"
           renovate-version: 43.220.0@sha256:459b7e28aa54fa2fa7db83df6a2d6ad26de416a054ee554e7833203adf3d9a47
           token: ${{ steps.app-token.outputs.token }}
       - name: Upload Renovate logs to Backblaze bucket
         env:
-          LOG_FILE: renovate-log.json
+          LOG_FILE: /tmp/renovate-log.json
         run: |
           AUTHZ=$(curl -sf -u "${{ secrets.BACKBLAZE_KEY_ID }}:${{secrets.BACKBLAZE_APPLICATION_KEY }}" https://api.backblazeb2.com/b2api/v4/b2_authorize_account)
           echo "::add-mask::$AUTHZ"
