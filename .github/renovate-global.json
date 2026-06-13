@@ -16,5 +16,16 @@
         "configValidation": "Renovate config validation",
         "mergeConfidence": "Renovate merge confidence",
         "minimumReleaseAge": "Renovate minimum release age"
-    }
+    },
+    "customManagers": [
+        {
+            "managerFilePatterns": [
+                "/^\\.github/(?:workflows|actions)/.+\\.ya?ml$/",
+                "/(?:^|/)action\\.ya?ml$/"
+            ],
+            "matchStrings": [
+                "# renovate: datasource=(?<datasource>[^\\s]+) depName=(?<depName>[^\\s]+)(?: packageName=(?<packageName>[^\\s]+))?(?: versioning=(?<versioning>[^\\s]+))?\\s+\\w+(?:_VERSION|-version): ['\"]?(?<currentValue>[^\\s@]+)(@(?<currentDigest>sha256:[a-f0-9]+))?['\"]?"
+            ]
+        }
+    ]
 }
