@@ -26,21 +26,21 @@ jobs:
           owner: ${{ github.repository_owner }}
       - name: Run self-hosted Renovate
         env:
-          LOG_FILE: /tmp/renovate-log.json
+          LOG_FILE: /tmp/renovate-log.jsonl
           LOG_FILE_FORMAT: json
           LOG_FILE_LEVEL: debug
         uses: renovatebot/github-action@8217b3fc286df088d7c27f3255fe8414463bc0fd # v46.1.15
         with:
           configurationFile: .github/renovate-global.json
+          docker-cmd-file: .github/renovate-entrypoint.sh
           env-regex: "^(?:RENOVATE_\\w+|LOG_\\w+|GITHUB_COM_TOKEN|NODE_OPTIONS|NO_COLOR|(?:HTTPS?|NO)_PROXY|(?:https?|no)_proxy)$"
           renovate-version: 43.220.0@sha256:459b7e28aa54fa2fa7db83df6a2d6ad26de416a054ee554e7833203adf3d9a47
           token: ${{ steps.app-token.outputs.token }}
       - name: Upload Renovate logs to Backblaze bucket
         env:
-          LOG_FILE: /tmp/renovate-log.json
+          LOG_FILE: /tmp/renovate-log.jsonl
         run: |
           AUTHZ=$(curl -sf -u "${{ secrets.BACKBLAZE_KEY_ID }}:${{secrets.BACKBLAZE_APPLICATION_KEY }}" https://api.backblazeb2.com/b2api/v4/b2_authorize_account)
-          echo "::add-mask::$AUTHZ"
           AUTHZ_TOKEN=$(echo $AUTHZ | jq -r .authorizationToken)
           echo "::add-mask::$AUTHZ_TOKEN"
           API_URL=$(echo $AUTHZ | jq -r .apiInfo.storageApi.apiUrl)
@@ -49,14 +49,13 @@ jobs:
           UPLOAD=$(curl -sf -H "Authorization: $AUTHZ_TOKEN" \
           -d '{"bucketId": "${{ secrets.BACKBLAZE_BUCKET_ID }}"}' \
           $API_URL/b2api/v4/b2_get_upload_url)
-          echo "::add-mask::$UPLOAD"
           UPLOAD_URL=$(echo $UPLOAD | jq -r .uploadUrl)
           echo "::add-mask::$UPLOAD_URL"
           UPLOAD_AUTHZ_TOKEN=$(echo $UPLOAD | jq -r .authorizationToken)
           echo "::add-mask::$UPLOAD_AUTHZ_TOKEN"
 
           curl -sf -H "Authorization: $UPLOAD_AUTHZ_TOKEN" \
-          -H "X-Bz-File-Name: logs%2Frenovate-log-$(TZ=Europe/Brussels date +%Y%m%d%H%M).json" \
+          -H "X-Bz-File-Name: logs%2Frenovate-$(TZ=Europe/Brussels date +%Y%m%d%H%M).jsonl" \
           -H "Content-Type: application/json" \
           -H "Content-Length: $(stat --format %s $LOG_FILE)" \
           -H "X-Bz-Content-Sha1: $(sha1sum $LOG_FILE | cut -f1 -d ' ')" \
