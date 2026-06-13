@@ -1,5 +1,20 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-global-schema.json",
     "autodiscover": true,
-    "onboarding": false
+    "onboarding": true,
+    "onboardingConfigFileName": ".github/renovate.json",
+    "extends": [
+        "config:best-practices"
+    ],
+    "timezone": "Europe/Brussels",
+    "schedule": [
+        "* 0-5 * * *"
+    ],
+    "osvVulnerabilityAlerts": true,
+    "statusCheckNames": {
+        "artifactError": "Renovate artifacts",
+        "configValidation": "Renovate config validation",
+        "mergeConfidence": "Renovate merge confidence",
+        "minimumReleaseAge": "Renovate minimum release age"
+    }
 }
