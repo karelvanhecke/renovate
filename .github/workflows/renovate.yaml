@@ -39,7 +39,10 @@ jobs:
       - name: Upload Renovate logs to Backblaze bucket
         env:
           LOG_FILE: /tmp/renovate-log.jsonl
+        if: ${{ !cancelled() }}
         run: |
+          [[ -e $LOG_FILE ]] || exit 0
+
           AUTHZ=$(curl -sf -u "${{ secrets.BACKBLAZE_KEY_ID }}:${{secrets.BACKBLAZE_APPLICATION_KEY }}" https://api.backblazeb2.com/b2api/v4/b2_authorize_account)
           AUTHZ_TOKEN=$(echo $AUTHZ | jq -r .authorizationToken)
           echo "::add-mask::$AUTHZ_TOKEN"
