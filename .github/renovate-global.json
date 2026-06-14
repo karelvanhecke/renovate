@@ -7,9 +7,6 @@
         "config:best-practices"
     ],
     "timezone": "Europe/Brussels",
-    "schedule": [
-        "* 0-5 * * *"
-    ],
     "osvVulnerabilityAlerts": true,
     "statusCheckNames": {
         "artifactError": "Renovate artifacts",
