@@ -1,5 +1,5 @@
 ---
-name: Renovate Config
+name: Renovate repository config
 
 on:
   pull_request:
