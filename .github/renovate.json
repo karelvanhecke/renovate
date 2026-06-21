@@ -13,6 +13,10 @@
         "patch"
       ],
       "automerge": true
+    },
+    {
+      "matchDepNames":["ghcr.io/renovatebot/renovate"],
+      "enabled": false
     }
   ]
 }
