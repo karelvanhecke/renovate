@@ -34,7 +34,7 @@ jobs:
           docker-cmd-file: .github/renovate-entrypoint.sh
           env-regex: "^(?:RENOVATE_\\w+|LOG_\\w+|GITHUB_COM_TOKEN|NODE_OPTIONS|NO_COLOR|(?:HTTPS?|NO)_PROXY|(?:https?|no)_proxy)$"
           # renovate: datasource=docker depName=ghcr.io/renovatebot/renovate
-          renovate-version: 43.265.2@sha256:142e25253451ccd7058e9f19a7373741cb06e51bc78e7b72ef6e6939af89713f
+          renovate-version: 43.265.3@sha256:92fc74ed84788ff85c250224d4f6a2b15fa37304039b04a163b52e0c14d443da
           token: ${{ steps.app-token.outputs.token }}
       - name: Upload Renovate logs to Backblaze bucket
         env:
