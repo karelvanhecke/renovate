@@ -11,7 +11,7 @@ jobs:
     name: Renovate config validator
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/renovatebot/renovate:44.17.3@sha256:58f45d505a1bdcc218de2f6894b77df758d3d48e0eb32d45c69e9444677a29e8
+      image: ghcr.io/renovatebot/renovate:44.17.5@sha256:dbbf9657fe838765507f8e633ad57dd29ab3dc7812cf324872be6aa360b0ffa7
       # github hosted runners are running as `1001:127` (ubuntu:docker)
       options: -u 1001:0 --group-add 1000 --group-add 12021 --group-add 127
     steps:
